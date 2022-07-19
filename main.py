@@ -4,7 +4,8 @@ from sqlalchemy.orm import sessionmaker
 
 from models_1 import create_tables, Publisher, Shop, Book, Stock, Sale
 
-DSN = "postgresql://postgres:postgres@localhost:5432/ORM_db"
+DSN = os.getenv(key='DATABASE_URL', default='postgresql://postgres:postgres@localhost:5432/ORM_db')
+
 engine = sqlalchemy.create_engine(DSN)
 
 create_tables(engine)
