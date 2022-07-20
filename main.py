@@ -8,6 +8,8 @@ DSN = os.getenv(key='DATABASE_URL', default='postgresql://postgres:postgres@loca
 
 engine = sqlalchemy.create_engine(DSN)
 
+con = engine.connect
+
 create_tables(engine)
 
 Session = sessionmaker(bind=engine)
@@ -65,8 +67,10 @@ def req_publisher():
 
 # выборка магазинов, продающих целевого издателя
 def req_shop_publisher():
-    q = session.query(Shop).filter(Publisher.name == input("Введите название издательства для получения магазина, "
-                                                           "продающего его книги: "))
+    q = session.query(Shop).join(Stock.shop).join(Book.publisher).join(Publisher.name).filter(
+        Publisher.name == input("Введите "
+                                "название издательства для получения магазина, "
+                                "продающего его книги: "))
     for s in q.all():
         print(s.name)
 
